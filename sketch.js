@@ -7,6 +7,10 @@ by Mingna, Allie, Ning, Yuguang
 let mouseMode = false;
 let frame;
 let blue;
+let color;
+let value;
+let color2;
+let stopdraw = true;
 
 let x;
 let y;
@@ -26,19 +30,20 @@ let vizElbowLeft;
 function preload() {
   //frame = loadImage('frame.png');
   blue = loadImage('blue.jpg')
+  color = loadImage('color3.jpg')
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   //frameRate(30);
   background(0);
-  //blue = loadImage('blue.jpg')
-  //frame = loadImage('frame.jpg')
+  noCursor();
+
   // imageMode(CENTER);
 
 
   // Define and create an instance of kinectron
-  kinectron = new Kinectron("10.17.201.104");
+  kinectron = new Kinectron("10.18.160.87");
 
   // Connect with application over peer
   kinectron.makeConnection();
@@ -47,7 +52,6 @@ function setup() {
   kinectron.startTrackedBodies(bodyTracked);
 
 }
-
 
 function draw() {
   //background(0)
@@ -60,12 +64,21 @@ function draw() {
 
   //console.log(c);
   noStroke();
-  if (x && y) {
-    y = map(y, 300, 600, 0, 600)
-    c = blue.get(x, y);
-    fill(c[0], c[1], c[2], random(10, 30));
-    ellipse(x, y, random(10, 80), random(10, 80));
-    console.log(x, y)
+  if (stopdraw == false) {
+    if (x && y) {
+      y = map(y, 300, 600, 0, 600)
+      if (mouseMode == false) {
+        c = blue.get(x, y);
+      }
+      if (mouseMode == true) {
+        c = color.get(x, y);
+      }
+
+
+      fill(c[0], c[1], c[2], random(10, 30));
+      ellipse(x, y, random(10, 80), random(10, 80));
+      console.log(x, y)
+    }
   }
 
 }
@@ -145,4 +158,15 @@ function drawJoint(joint) {
   // stroke(255);
   // strokeWeight(5);
   point(pos.x, pos.y);
+}
+
+function keyTyped() {
+  if (key === '1') {
+    mouseMode = !mouseMode;
+  }
+  if (key === 's') {
+    stopdraw = !stopdraw;
+    background(0);
+  }
+  console.log(stopdraw)
 }
